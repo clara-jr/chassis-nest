@@ -1,44 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cat } from './cats.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { UpdateCatDto } from './dto/update-cat.dto';
 
 @Injectable()
 export class CatsService {
-  private cats: Cat[] = [
-    {
-      string: 'string',
-      number: 1,
-      boolean: true,
-      date: new Date(),
-    },
-  ];
+  constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>) {}
 
-  findAll(): Cat[] {
-    return this.cats;
+  findAll() {
+    return this.catModel.find().exec();
   }
 
   findOne(id: string) {
-    const cat = this.cats.find((item) => item.id === +id);
+    const cat = this.catModel.findOne({ _id: id }).exec();
     if (!cat) {
       throw new NotFoundException(`Cat #${id} not found`);
     }
     return cat;
   }
 
-  create(createCatDto: any) {
-    this.cats.push(createCatDto);
+  create(createCatDto: CreateCatDto) {
+    const cat = new this.catModel(createCatDto);
+    return cat.save();
   }
 
-  update(id: string, updateCatDto: any) {
-    const existingCat = this.findOne(id);
-    if (existingCat) {
-      // update the existing entity
+  async update(id: string, updateCatDto: UpdateCatDto) {
+    const existingCat = await this.catModel
+      .findOneAndUpdate({ _id: id }, { $set: updateCatDto }, { new: true })
+      .exec();
+
+    if (!existingCat) {
+      throw new NotFoundException(`Cat #${id} not found`);
     }
+    return existingCat;
   }
 
-  remove(id: string) {
-    const catIndex = this.cats.findIndex((item) => item.id === +id);
-    if (catIndex >= 0) {
-      this.cats.splice(catIndex, 1);
-    }
+  async remove(id: string) {
+    const cat = await this.findOne(id);
+    return cat.deleteOne();
   }
 }
