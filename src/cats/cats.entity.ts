@@ -1,24 +1,28 @@
 import { SchemaFactory, Schema, Prop } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 @Schema()
 export class Cat extends Document {
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, index: true, required: true })
+  index: ObjectId;
+
+  @Prop(String)
   string: string;
 
-  @Prop()
+  @Prop(Number)
   number: number;
 
-  @Prop()
+  @Prop({ type: Boolean, default: false })
   boolean: boolean;
 
-  @Prop()
+  @Prop(Date)
   date: Date;
 
   @Prop([String])
   stringsArray: string[];
 
-  @Prop()
+  @Prop([{ string: String, date: Date }])
   objectsArray: [
     {
       string: string;
@@ -26,14 +30,26 @@ export class Cat extends Document {
     },
   ];
 
-  @Prop()
+  @Prop({ string: String, number: Number })
   embedded: {
     string: string;
     number: number;
   };
 
-  @Prop()
+  @Prop({ type: Object })
   object: object;
 }
 
 export const CatSchema = SchemaFactory.createForClass(Cat);
+
+/**
+ * Compound index referencing multiple properties
+ *
+ * In this example:
+ * We passed a value of 1 (to index) which specifies that the index
+ * should order these items in an Ascending order.
+ *
+ * We passed string a value of (negative) -1 which specifies that
+ * the index should order these items in Descending order.
+ */
+CatSchema.index({ index: 1, string: -1 });
