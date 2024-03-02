@@ -13,6 +13,10 @@ async function bootstrap() {
       // Enable auto transform feature to transform body in an instance of the proper DTO,
       // or path/query params to booleans or numbers depending on the indicated type in the controller
       transform: true,
+      transformOptions: {
+        // With this configuration, is no longer needed to specify the @Type in the attributes of the DTOs
+        enableImplicitConversion: true,
+      },
     }),
   );
   await app.listen(3000);
