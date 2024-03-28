@@ -26,21 +26,24 @@ export class CatsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `This action returns #${id} document`;
+    console.log(`This action returns #${id} document`);
+    return this.catsService.findOne(id);
   }
 
   @Post()
   create(@Body() body: CreateCatDto) {
-    return body;
+    return this.catsService.create(body);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: UpdateCatDto) {
-    return `This action updates #${id} document with body ${body}`;
+    console.log(`This action updates #${id} document with body ${body}`);
+    return this.catsService.update(id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes #${id} document`;
+    console.log(`This action removes #${id} document`);
+    return this.catsService.remove(id);
   }
 }
