@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cat } from './cats.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateCatDto } from './dto/create-cat.dto';
-import { UpdateCatDto } from './dto/update-cat.dto';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { CreateCatDto } from './dtos/create-cat.dto';
+import { UpdateCatDto } from './dtos/update-cat.dto';
+import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 
 @Injectable()
 export class CatsService {

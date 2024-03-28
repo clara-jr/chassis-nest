@@ -9,8 +9,8 @@ import {
   Body,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { UpdateCatDto } from './dto/update-cat.dto';
-import { CreateCatDto } from './dto/create-cat.dto';
+import { UpdateCatDto } from './dtos/update-cat.dto';
+import { CreateCatDto } from './dtos/create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
