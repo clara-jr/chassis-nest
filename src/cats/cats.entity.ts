@@ -30,7 +30,7 @@ export class Cat extends Document {
     },
   ];
 
-  @Prop({ string: String, number: Number })
+  @Prop({ type: Object, of: { string: String, number: Number } })
   embedded: {
     string: string;
     number: number;

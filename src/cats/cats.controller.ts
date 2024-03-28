@@ -17,12 +17,11 @@ export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Get()
-  findAll(@Query() paginationQuery) {
-    const { limit, offset } = paginationQuery;
+  findAll(@Query() paginationQuery?) {
     console.log(
-      `This action returns all documents. Limit ${limit}, offset: ${offset}`,
+      `This action returns all documents. Limit ${paginationQuery?.limit}, offset: ${paginationQuery?.offset}`,
     );
-    return this.catsService.findAll();
+    return this.catsService.findAll(paginationQuery);
   }
 
   @Get(':id')

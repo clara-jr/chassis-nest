@@ -10,7 +10,8 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 export class CatsService {
   constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>) {}
 
-  findAll(paginationQuery: PaginationQueryDto) {
+  findAll(paginationQuery?: PaginationQueryDto) {
+    if (!paginationQuery) return this.catModel.find().exec();
     const { limit, offset } = paginationQuery;
     return this.catModel.find().skip(offset).limit(limit).exec();
   }
