@@ -22,6 +22,10 @@ describe('CatsController (e2e)', () => {
     catModel = module.get<Model<Cat>>(getModelToken(Cat.name));
   });
 
+  afterEach(async () => {
+    await catModel.deleteMany();
+  });
+
   afterAll(async () => {
     await app.close();
   });
