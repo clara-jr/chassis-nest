@@ -40,6 +40,10 @@ export class Cat extends Document {
   object: object;
 }
 
+export interface CatType extends Cat {
+  _id: mongoose.Schema.Types.ObjectId;
+}
+
 export const CatSchema = SchemaFactory.createForClass(Cat);
 
 /**
