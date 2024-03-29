@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (
       !(exception instanceof ApiError) &&
-      exception.name === 'ValidationError'
+      (exception.name === 'ValidationError' || exception.name === 'CastError')
     ) {
       exception = new ApiError(400, 'VALIDATION_ERROR', exception.message);
     }
