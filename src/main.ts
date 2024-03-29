@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
@@ -48,6 +49,17 @@ async function stop(app) {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setup(app);
+
+  // Set openapi documentation
+  const options = new DocumentBuilder()
+    .setTitle('chassis-nest')
+    .setDescription(
+      'Chassis for a REST API using NestJS, Express.js, MongoDB and Redis',
+    )
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('openapi', app, document);
 
   // Start Express server
   await app.listen(PORT);

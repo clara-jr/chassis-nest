@@ -42,6 +42,9 @@ export class CatsService {
 
   async remove(id: string) {
     const cat = await this.findOne(id);
+    if (!cat) {
+      throw new NotFoundError(`Cat #${id} not found`);
+    }
     return cat.deleteOne();
   }
 }

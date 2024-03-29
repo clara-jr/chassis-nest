@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
+  Put,
   Delete,
   Param,
   Query,
@@ -13,7 +13,9 @@ import { UpdateCatDto } from './dtos/update-cat.dto';
 import { CreateCatDto } from './dtos/create-cat.dto';
 import { JwtUser, JwtUserType } from 'src/common/decorators/jwtUser.decorator';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cats')
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
@@ -29,6 +31,7 @@ export class CatsController {
     return this.catsService.findAll(paginationQuery);
   }
 
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Get(':id')
   findOne(@Param('id') id: string, @JwtUser() jwtUser: JwtUserType) {
     console.log(
@@ -37,6 +40,8 @@ export class CatsController {
     return this.catsService.findOne(id);
   }
 
+  @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Post()
   create(@Body() body: CreateCatDto, @JwtUser() jwtUser: JwtUserType) {
     console.log(
@@ -45,7 +50,9 @@ export class CatsController {
     return this.catsService.create(body);
   }
 
-  @Patch(':id')
+  @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() body: UpdateCatDto,
@@ -57,6 +64,7 @@ export class CatsController {
     return this.catsService.update(id, body);
   }
 
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Delete(':id')
   remove(@Param('id') id: string, @JwtUser() jwtUser: JwtUserType) {
     console.log(
