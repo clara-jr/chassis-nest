@@ -5,7 +5,7 @@ import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
 import { Cat } from './cats.entity';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
-import { JwtUserType } from 'src/decorators/jwtUser.decorator';
+import { JwtUserType } from 'src/common/decorators/jwtUser.decorator';
 
 describe('CatsController', () => {
   let controller: CatsController;

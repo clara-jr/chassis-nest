@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { CreateCatDto } from './dtos/create-cat.dto';
 import { UpdateCatDto } from './dtos/update-cat.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
-import { NotFoundError } from 'src/middlewares/http-exception.filter';
+import { NotFoundError } from 'src/common/middlewares/http-exception.filter';
 
 @Injectable()
 export class CatsService {

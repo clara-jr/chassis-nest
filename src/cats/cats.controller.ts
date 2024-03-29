@@ -11,7 +11,7 @@ import {
 import { CatsService } from './cats.service';
 import { UpdateCatDto } from './dtos/update-cat.dto';
 import { CreateCatDto } from './dtos/create-cat.dto';
-import { JwtUser, JwtUserType } from 'src/decorators/jwtUser.decorator';
+import { JwtUser, JwtUserType } from 'src/common/decorators/jwtUser.decorator';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 
 @Controller('cats')

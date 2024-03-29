@@ -4,7 +4,7 @@ import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import {
   ApiError,
   HttpExceptionFilter,
-} from './middlewares/http-exception.filter';
+} from './common/middlewares/http-exception.filter';
 
 const PORT = process.env.PORT || 8080;
 

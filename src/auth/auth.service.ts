@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4, v5 as uuidv5 } from 'uuid';
-import { ApiError } from '../middlewares/http-exception.filter';
+import { ApiError } from '../common/middlewares/http-exception.filter';
 import CacheService from '../cache/cache.service';
 
 @Injectable()
