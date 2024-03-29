@@ -49,8 +49,6 @@ export default class AuthService {
   }
 
   async createToken(sessionData: object) {
-    console.log('❌❌❌❌❌❌❌❌');
-    console.log(this.uuidNamespace);
     const jti = uuidv5(uuidv4(), this.uuidNamespace);
     const tokenData = {
       jti,
