@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cat } from './cats.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCatDto } from './dtos/create-cat.dto';
 import { UpdateCatDto } from './dtos/update-cat.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { NotFoundError } from 'src/middlewares/http-exception.filter';
 
 @Injectable()
 export class CatsService {
@@ -16,10 +17,10 @@ export class CatsService {
     return this.catModel.find().skip(offset).limit(limit).exec();
   }
 
-  findOne(id: string) {
-    const cat = this.catModel.findOne({ _id: id }).exec();
+  async findOne(id: string) {
+    const cat = await this.catModel.findOne({ _id: id }).exec();
     if (!cat) {
-      throw new NotFoundException(`Cat #${id} not found`);
+      throw new NotFoundError(`Cat #${id} not found`);
     }
     return cat;
   }
@@ -35,7 +36,7 @@ export class CatsService {
       .exec();
 
     if (!existingCat) {
-      throw new NotFoundException(`Cat #${id} not found`);
+      throw new NotFoundError(`Cat #${id} not found`);
     }
     return existingCat;
   }
