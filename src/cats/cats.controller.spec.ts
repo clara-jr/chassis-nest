@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
 import { Cat } from './cats.entity';
+import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { JwtUserType } from 'src/decorators/jwtUser.decorator';
 
 describe('CatsController', () => {
   let controller: CatsController;
@@ -32,7 +34,10 @@ describe('CatsController', () => {
   it('should return service response', async () => {
     const mockedValue = [];
     jest.spyOn(service, 'findAll').mockResolvedValue(mockedValue);
-    const result = await controller.findAll();
+    const result = await controller.findAll(
+      {} as PaginationQueryDto,
+      { userName: 'test' } as JwtUserType,
+    );
     expect(result).toEqual(mockedValue);
   });
 });

@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { CatsService } from './cats.service';
 import { Cat } from './cats.entity';
 import { CatsModule } from './cats.module';
+import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 
 describe('CatsService', () => {
   let service: CatsService;
@@ -41,7 +42,7 @@ describe('CatsService', () => {
   it('should return all documents in database', async () => {
     const index = '123456789123456789123456';
     await catModel.create([{ index }]); // insert test data into the database
-    const result = await service.findAll();
+    const result = await service.findAll({} as PaginationQueryDto);
     expect(result).toHaveLength(1);
     expect(result[0].index.toString()).toEqual(index);
   });
