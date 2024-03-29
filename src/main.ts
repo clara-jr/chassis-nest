@@ -5,6 +5,8 @@ import {
   ApiError,
   HttpExceptionFilter,
 } from './middlewares/http-exception.filter';
+import { AuthGuard } from './auth/auth.guard';
+import AuthService from './auth/auth.service';
 
 const PORT = process.env.PORT || 8080;
 
@@ -23,13 +25,15 @@ function setup(app) {
       exceptionFactory: () => {
         return new ApiError(
           HttpStatus.BAD_REQUEST,
-          'BAD_REQUEST',
+          'VALIDATION_ERROR',
           'Invalid data',
         );
       },
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  const authService = app.get(AuthService);
+  app.useGlobalGuards(new AuthGuard(authService));
 }
 
 async function bootstrap() {
