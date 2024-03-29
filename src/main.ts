@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { json } from 'express';
+import helmet from 'helmet';
+import * as cookieParser from 'cookie-parser';
+
+import { AppModule } from './app.module';
 import {
   ApiError,
   HttpExceptionFilter,
@@ -9,6 +13,10 @@ import {
 const PORT = process.env.PORT || 8080;
 
 function setup(app) {
+  app.use(helmet()); // set HTTP response headers
+  app.use(json()); // for parsing application/json
+  app.enableCors(); // enable CORS
+  app.use(cookieParser()); // set req.cookies
   app.useGlobalPipes(
     new ValidationPipe({
       // Avoid creating/updating objects with fields not included in DTO by ignoring them:
@@ -32,11 +40,37 @@ function setup(app) {
   app.useGlobalFilters(new HttpExceptionFilter());
 }
 
+async function stop(app) {
+  await app.close();
+  console.info('👋 Express server stopped');
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setup(app);
+
+  // Start Express server
   await app.listen(PORT);
+  console.info(`✅ Express server listening at port: ${PORT}`);
+
+  // Docker stop
+  process.on('SIGTERM', async () => {
+    await stop(app);
+    process.exit(0);
+  });
+
+  // Ctrl-C
+  process.on('SIGINT', async () => {
+    await stop(app);
+    process.exit(0);
+  });
+
+  // Nodemon restart
+  process.on('SIGUSR2', async () => {
+    await stop(app);
+    process.exit(0);
+  });
 }
 bootstrap();
 
-export { bootstrap, setup };
+export { bootstrap, setup, stop };

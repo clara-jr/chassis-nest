@@ -52,8 +52,9 @@ export default class CacheService implements OnApplicationShutdown {
     return await this.redis.setex(key, ttl, JSON.stringify(value));
   }
 
-  disconnect() {
-    this.redis.disconnect();
+  async disconnect() {
+    await this.redis.disconnect();
+    console.info('👋 Redis disconnected.');
   }
 
   async onApplicationShutdown() {

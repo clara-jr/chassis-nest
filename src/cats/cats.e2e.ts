@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { AppModule } from '../app.module';
 import { Model } from 'mongoose';
 import { Cat } from './cats.entity';
-import { setup } from 'src/main';
+import { setup, stop } from 'src/main';
 import AuthService from 'src/auth/auth.service';
 
 describe('CatsController (e2e)', () => {
@@ -35,7 +35,7 @@ describe('CatsController (e2e)', () => {
 
   afterAll(async () => {
     await authService.clearSessionData(token);
-    await app.close();
+    await stop(app);
   });
 
   describe('GET /', () => {
