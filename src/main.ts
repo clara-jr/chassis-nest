@@ -9,7 +9,7 @@ import { AppModule } from './app.module';
 import {
   ApiError,
   HttpExceptionFilter,
-} from './common/middlewares/http-exception.filter';
+} from './common/filters/http-exception.filter';
 
 const PORT = process.env.PORT || 8080;
 

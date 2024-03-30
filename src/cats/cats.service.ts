@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCatDto } from './dtos/create-cat.dto';
 import { UpdateCatDto } from './dtos/update-cat.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
-import { NotFoundError } from 'src/common/middlewares/http-exception.filter';
+import { NotFoundError } from 'src/common/filters/http-exception.filter';
 import { CatsRepository } from './cats.repository';
 
 @Injectable()
