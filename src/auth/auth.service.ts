@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4, v5 as uuidv5 } from 'uuid';
-import { ApiError } from '../common/middlewares/http-exception.filter';
+import { ApiError } from '../common/filters/http-exception.filter';
 import CacheService from '../cache/cache.service';
 
 @Injectable()
@@ -9,8 +9,8 @@ export default class AuthService {
   private sessionTTL: number = 60 * 60; // session expires in 1 h
   private jwtOptions: object = {
     // To eliminate the need for a refresh token, we do not set a token expiration (expiresIn). Instead, we verify the existence of a Redis session.
-    audience: 'chassis-node-js',
-    issuer: 'chassis-node-js',
+    audience: 'chassis-nest',
+    issuer: 'chassis-nest',
   };
   private jwtSecret: string;
   private uuidNamespace: string;
@@ -42,7 +42,7 @@ export default class AuthService {
     // Extend redis key expiration
     await this.cacheService.setex(
       `chassis-session:${jti}`,
-      sessionData,
+      JSON.parse(sessionData),
       this.sessionTTL,
     );
     return JSON.parse(sessionData);
