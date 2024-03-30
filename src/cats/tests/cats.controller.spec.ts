@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CatsController } from './cats.controller';
-import { CatsService } from './cats.service';
-import { Cat } from './cats.entity';
+import { CatsController } from '../cats.controller';
+import { CatsService } from '../cats.service';
+import { Cat } from '../cats.entity';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { JwtUserType } from 'src/common/decorators/jwtUser.decorator';
+import { CatsRepository } from '../cats.repository';
 
 describe('CatsController', () => {
   let controller: CatsController;
@@ -16,6 +17,7 @@ describe('CatsController', () => {
       controllers: [CatsController],
       providers: [
         CatsService,
+        CatsRepository,
         {
           provide: getModelToken(Cat.name),
           useValue: Model<Cat>,

@@ -1,23 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from './cats.entity';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { CreateCatDto } from './dtos/create-cat.dto';
 import { UpdateCatDto } from './dtos/update-cat.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { NotFoundError } from 'src/common/middlewares/http-exception.filter';
+import { CatsRepository } from './cats.repository';
 
 @Injectable()
 export class CatsService {
-  constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>) {}
+  constructor(private readonly catsRepository: CatsRepository) {}
 
   findAll(paginationQuery?: PaginationQueryDto) {
-    const { limit, offset } = paginationQuery;
-    return this.catModel.find().skip(offset).limit(limit).exec();
+    return this.catsRepository.find({}, paginationQuery);
   }
 
   async findOne(id: string) {
-    const cat = await this.catModel.findOne({ _id: id }).exec();
+    const cat = await this.catsRepository.findById(id);
     if (!cat) {
       throw new NotFoundError(`Cat #${id} not found`);
     }
@@ -25,26 +22,26 @@ export class CatsService {
   }
 
   create(createCatDto: CreateCatDto) {
-    const cat = new this.catModel(createCatDto);
-    return cat.save();
+    return this.catsRepository.create(createCatDto);
   }
 
   async update(id: string, updateCatDto: UpdateCatDto) {
-    const existingCat = await this.catModel
-      .findOneAndUpdate({ _id: id }, { $set: updateCatDto }, { new: true })
-      .exec();
-
-    if (!existingCat) {
-      throw new NotFoundError(`Cat #${id} not found`);
-    }
-    return existingCat;
-  }
-
-  async remove(id: string) {
-    const cat = await this.findOne(id);
+    const cat = await this.catsRepository.findByIdAndUpdate(
+      id,
+      { $set: updateCatDto },
+      { new: true },
+    );
     if (!cat) {
       throw new NotFoundError(`Cat #${id} not found`);
     }
-    return cat.deleteOne();
+    return cat;
+  }
+
+  async remove(id: string) {
+    const cat = await this.catsRepository.findByIdAndDelete(id);
+    if (!cat) {
+      throw new NotFoundError(`Cat #${id} not found`);
+    }
+    return cat;
   }
 }

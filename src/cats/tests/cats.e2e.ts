@@ -1,17 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { getModelToken } from '@nestjs/mongoose';
 import * as request from 'supertest';
 
-import { AppModule } from '../app.module';
-import { Model } from 'mongoose';
-import { Cat } from './cats.entity';
+import { AppModule } from '../../app.module';
 import { setup, stop } from 'src/main';
 import AuthService from 'src/auth/auth.service';
+import { CatsRepository } from '../cats.repository';
 
 describe('CatsController (e2e)', () => {
   let app: INestApplication;
-  let catModel: Model<Cat>;
+  let catRepository: CatsRepository;
   let authService: AuthService;
   let token: string;
 
@@ -24,13 +22,13 @@ describe('CatsController (e2e)', () => {
     setup(app);
     await app.init();
 
-    catModel = module.get<Model<Cat>>(getModelToken(Cat.name));
+    catRepository = module.get<CatsRepository>(CatsRepository);
     authService = module.get<AuthService>(AuthService);
     token = token || (await authService.createToken({ userName: 'test' }));
   });
 
   afterEach(async () => {
-    await catModel.deleteMany();
+    await catRepository.deleteMany({});
   });
 
   afterAll(async () => {
@@ -49,7 +47,7 @@ describe('CatsController (e2e)', () => {
     describe('when token is valid', () => {
       const index = '123456789123456789123456';
       beforeEach(async () => {
-        await catModel.create({ index });
+        await catRepository.create({ index });
       });
       it('should respond with 200 OK', async () => {
         const res = await request(app.getHttpServer())
@@ -95,7 +93,7 @@ describe('CatsController (e2e)', () => {
           .expect(201);
         expect(res.body.index.toString()).toEqual(index);
 
-        const object = await catModel.findOne({ index });
+        const object = await catRepository.findOne({ index });
         expect(object?.index.toString()).toEqual(index);
       });
     });
@@ -116,7 +114,7 @@ describe('CatsController (e2e)', () => {
     describe('when object exists', () => {
       let _id;
       beforeEach(async () => {
-        ({ _id } = await catModel.create({ index }));
+        ({ _id } = await catRepository.create({ index }));
       });
       it('should respond with 200 OK', async () => {
         const res = await request(app.getHttpServer())

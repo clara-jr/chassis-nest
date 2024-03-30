@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ShutdownSignal, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json } from 'express';
 import helmet from 'helmet';
@@ -60,6 +60,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('openapi', app, document);
+
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);
 
   // Start Express server
   await app.listen(PORT);

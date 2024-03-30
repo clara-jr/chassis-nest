@@ -1,16 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 
-import { Model } from 'mongoose';
-import { CatsService } from './cats.service';
-import { Cat } from './cats.entity';
-import { CatsModule } from './cats.module';
+import { CatsService } from '../cats.service';
+import { CatsModule } from '../cats.module';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { CatsRepository } from '../cats.repository';
 
 describe('CatsService', () => {
   let service: CatsService;
-  let catModel: Model<Cat>;
+  let catRepository: CatsRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,11 +27,11 @@ describe('CatsService', () => {
     }).compile();
 
     service = module.get<CatsService>(CatsService);
-    catModel = module.get<Model<Cat>>(getModelToken(Cat.name));
+    catRepository = module.get<CatsRepository>(CatsRepository);
   });
 
   afterEach(async () => {
-    await catModel.deleteMany();
+    await catRepository.deleteMany({});
   });
 
   it('should be defined', () => {
@@ -41,7 +40,7 @@ describe('CatsService', () => {
 
   it('should return all documents in database', async () => {
     const index = '123456789123456789123456';
-    await catModel.create([{ index }]); // insert test data into the database
+    await catRepository.create({ index }); // insert test data into the database
     const result = await service.findAll({} as PaginationQueryDto);
     expect(result).toHaveLength(1);
     expect(result[0].index.toString()).toEqual(index);
