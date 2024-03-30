@@ -13,7 +13,7 @@ describe('CatsController (e2e)', () => {
   let authService: AuthService;
   let token: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -24,7 +24,7 @@ describe('CatsController (e2e)', () => {
 
     catRepository = module.get<CatsRepository>(CatsRepository);
     authService = module.get<AuthService>(AuthService);
-    token = token || (await authService.createToken({ userName: 'test' }));
+    token = await authService.createToken({ userName: 'test' });
   });
 
   afterEach(async () => {

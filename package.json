@@ -19,7 +19,7 @@
     "start:debug": "nest start --debug --watch",
     "start:dev": "NODE_ENV=dev nest start --watch",
     "start:prod": "node dist/main",
-    "test": "npx jest",
+    "test": "npx jest --forceExit",
     "test:cov": "npx jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npx jest --config ./test/jest-e2e.json --forceExit",
