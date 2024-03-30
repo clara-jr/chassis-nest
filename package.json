@@ -8,16 +8,22 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "npx eslint . --ext ts,json",
+    "lint:fix": "npx eslint . --ext ts,json --fix",
+    "lint:quiet": "npx eslint . --ext ts,json --quiet",
+    "pre-commit": "npx lint-staged",
+    "pre-commit-msg": "npx --no -- commitlint --edit ${1}",
+    "pre-push": "npx jest",
+    "prepare": "husky",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:dev": "NODE_ENV=dev nest start --watch",
     "start:prod": "node dist/main",
-    "test": "jest",
-    "test:cov": "jest --coverage",
+    "test": "npx jest",
+    "test:cov": "npx jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json --forceExit",
-    "test:watch": "jest --watch"
+    "test:e2e": "npx jest --config ./test/jest-e2e.json --forceExit",
+    "test:watch": "npx jest --watch"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -59,6 +65,8 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -72,7 +80,9 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-json-format": "^2.0.1",
     "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^9.0.11",
     "jest": "^29.5.0",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
