@@ -79,12 +79,6 @@ async function bootstrap() {
     await stop(app);
     process.exit(0);
   });
-
-  // Nodemon restart
-  process.on('SIGUSR2', async () => {
-    await stop(app);
-    process.exit(0);
-  });
 }
 bootstrap();
 
