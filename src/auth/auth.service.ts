@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4, v5 as uuidv5 } from 'uuid';
 import { ApiError } from '../common/filters/http-exception.filter';
@@ -16,7 +16,7 @@ export default class AuthService {
   private uuidNamespace: string;
 
   constructor(
-    config: { jwtSecret: string; uuidNamespace: string },
+    @Inject('JWT_CONFIG') private config: Record<string, any>,
     private readonly cacheService: CacheService,
   ) {
     this.jwtSecret = config.jwtSecret || '';

@@ -12,13 +12,20 @@ import { HttpRequestLoggerMiddleware } from './common/middlewares/http-request-l
     ConfigModule.forRoot({
       envFilePath: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`,
     }),
-    CacheModule,
+    CacheModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.REDIS_URI,
+      }),
+    }),
     MongooseModule.forRootAsync({
       useFactory: () => ({
         uri: process.env.MONGODB_URI,
       }),
     }),
-    AuthModule,
+    AuthModule.forRoot({
+      jwtSecret: process.env.JWT_SECRET,
+      uuidNamespace: process.env.UUID_NAMESPACE,
+    }),
     CatsModule,
   ], // Any exported providers of these imported modules are now fully available here as well.
 })

@@ -195,15 +195,22 @@ App is launched listening on ***8080*** port by default, set the environment var
 
 15. Generate exception filter to catch exceptions: `nest g filter middlewares/http-exception`. Add `app.useGlobalFilters(new HttpExceptionFilter());` in `main.ts`.
 
-16. Create authentication guard: `nest g guard auth` and install dependencies needed for authentication process: `npm i jsonwebtoken uuid ioredis`. Create authentication service and its module. Create cache service and its module. Import both modules in `AppModule` and set guard in `main.ts`:
+16. Create authentication guard: `nest g guard auth` and install dependencies needed for authentication process: `npm i jsonwebtoken uuid ioredis`. Create authentication service and its dynamic module. Create cache service and its dynamic module. Import both modules in `AppModule` and set guard in `main.ts`:
 
     ```typescript
     // app.module.ts
     @Module({
       imports: [
         ...
-        CacheModule,
-        AuthModule,
+        CacheModule.forRootAsync({
+          useFactory: () => ({
+            uri: process.env.REDIS_URI,
+          }),
+        }),
+        AuthModule.forRoot({
+          jwtSecret: process.env.JWT_SECRET,
+          uuidNamespace: process.env.UUID_NAMESPACE,
+        }),
       ],
     })
 

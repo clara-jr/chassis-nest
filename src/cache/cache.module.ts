@@ -1,19 +1,30 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, DynamicModule } from '@nestjs/common';
 import CacheService from './cache.service';
 
 @Global()
-@Module({
-  providers: [
-    {
-      provide: CacheService,
-      useFactory: async () => {
-        const config = {
-          uri: process.env.REDIS_URI,
-        };
-        return CacheService.bootstrap(config);
-      },
-    },
-  ],
-  exports: [CacheService],
-})
-export class CacheModule {}
+@Module({})
+export class CacheModule {
+  static forRootAsync(options: {
+    useFactory: (...args: any[]) => Promise<{ uri: string }> | { uri: string };
+    inject?: any[];
+  }): DynamicModule {
+    return {
+      module: CacheModule,
+      providers: [
+        {
+          provide: 'REDIS_CONFIG',
+          useFactory: options.useFactory,
+          inject: options.inject,
+        },
+        {
+          provide: CacheService,
+          useFactory: async (options) => {
+            return CacheService.bootstrap(options);
+          },
+          inject: ['REDIS_CONFIG'],
+        },
+      ],
+      exports: [CacheService],
+    };
+  }
+}
