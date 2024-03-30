@@ -1,0 +1,14 @@
+coverage/
+node_modules/
+test/
+.git/
+README.md
+# WebStorm
+.idea/
+*.iml
+# Sublime
+*.sublime-workspace
+# VSCode
+.vscode
+# MacOS
+.DS_Store

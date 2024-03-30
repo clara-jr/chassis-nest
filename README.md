@@ -271,3 +271,12 @@ App is launched listening on ***8080*** port by default, set the environment var
     18.4. We can now use decorators to set (or override) API methods/properties/responses documentation: `@ApiProperty`, `@ApiResponse`, `@ApiTags`... We also need to fix PartialType for Swagger `import { PartialType } from '@nestjs/mapped-types';` ➡️ `import { PartialType } from '@nestjs/swagger'`;
 
 19. Create `entity.repository.ts` and `cats.repository.ts` to follow de [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html).
+
+20. Add `Dockerfile` and `.dockerignore`. After that, you can create de docker image and run the docker container with the following commands:
+
+    ```bash
+    docker build -t [IMAGE_NAME] .
+    docker run --name [CONTAINER_NAME] -p 8080:8080 -t -d [IMAGE_NAME]
+    ```
+
+21. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
