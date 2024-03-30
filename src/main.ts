@@ -46,6 +46,8 @@ function setup(app) {
 }
 
 async function stop(app) {
+  // This already closes MongoDB connection via MongooseModule
+  // and Redis vía CacheService onApplicationShutdown
   await app.close();
   console.info('👋 Express server stopped');
 }

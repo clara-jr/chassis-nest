@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, getConnectionToken } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { Connection } from 'mongoose';
 
 import { CatsService } from '../cats.service';
 import { CatsModule } from '../cats.module';
@@ -10,8 +11,9 @@ import { CatsRepository } from '../cats.repository';
 describe('CatsService', () => {
   let service: CatsService;
   let catRepository: CatsRepository;
+  let connection: Connection;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
@@ -28,10 +30,15 @@ describe('CatsService', () => {
 
     service = module.get<CatsService>(CatsService);
     catRepository = module.get<CatsRepository>(CatsRepository);
+    connection = await module.get(getConnectionToken());
   });
 
   afterEach(async () => {
     await catRepository.deleteMany({});
+  });
+
+  afterAll(async () => {
+    await connection.close();
   });
 
   it('should be defined', () => {
