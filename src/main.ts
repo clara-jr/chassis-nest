@@ -10,6 +10,8 @@ import {
   ApiError,
   HttpExceptionFilter,
 } from './common/filters/http-exception.filter';
+import { CacheInterceptor } from './common/interceptors/cache.interceptor';
+import CacheService from './cache/cache.service';
 
 const PORT = process.env.PORT || 8080;
 
@@ -38,6 +40,8 @@ function setup(app) {
       },
     }),
   );
+  const cacheService = app.get(CacheService);
+  app.useGlobalInterceptors(new CacheInterceptor(cacheService));
   app.useGlobalFilters(new HttpExceptionFilter());
 }
 

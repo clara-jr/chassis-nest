@@ -193,7 +193,7 @@ App is launched listening on ***8080*** port by default, set the environment var
     })
     ```
 
-15. Generate exception filter to catch exceptions: `nest g filter middlewares/http-exception`.
+15. Generate exception filter to catch exceptions: `nest g filter middlewares/http-exception`. Add `app.useGlobalFilters(new HttpExceptionFilter());` in `main.ts`.
 
 16. Create authentication guard: `nest g guard auth` and install dependencies needed for authentication process: `npm i jsonwebtoken uuid ioredis`. Create authentication service and its module. Create cache service and its module. Import both modules in `AppModule` and set guard in `main.ts`:
 
@@ -272,11 +272,13 @@ App is launched listening on ***8080*** port by default, set the environment var
 
 19. Create `entity.repository.ts` and `cats.repository.ts` to follow de [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html).
 
-20. Add `Dockerfile` and `.dockerignore`. After that, you can create de docker image and run the docker container with the following commands:
+20. Create cache interceptor: `nest g interceptor common/interceptors/cache` (we cannot use a cache middleware because middlewares are executed before guards, and we need `AuthGuard` to be runned before the cache interceptor in order to authenticate the user previously). Add `app.useGlobalInterceptors(new CacheInterceptor(cacheService));` in `main.ts`.
+
+21. Add `Dockerfile` and `.dockerignore`. After that, you can create de docker image and run the docker container with the following commands:
 
     ```bash
     docker build -t [IMAGE_NAME] .
     docker run --name [CONTAINER_NAME] -p 8080:8080 -t -d [IMAGE_NAME]
     ```
 
-21. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
+22. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
