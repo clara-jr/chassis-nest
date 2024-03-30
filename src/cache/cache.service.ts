@@ -41,15 +41,15 @@ export default class CacheService implements OnApplicationShutdown {
   }
 
   async get(key: string) {
-    return await this.redis.get(key);
+    return this.redis.get(key);
   }
 
   async del(key: string) {
-    return await this.redis.del(key);
+    return this.redis.del(key);
   }
 
   async setex(key: string, value: object | string, ttl: number = this.TTL) {
-    return await this.redis.setex(key, ttl, JSON.stringify(value));
+    return this.redis.setex(key, ttl, JSON.stringify(value));
   }
 
   async disconnect() {

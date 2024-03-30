@@ -10,7 +10,7 @@ import CacheService from './cache.service';
         const config = {
           uri: process.env.REDIS_URI,
         };
-        return await CacheService.bootstrap(config);
+        return CacheService.bootstrap(config);
       },
     },
   ],
