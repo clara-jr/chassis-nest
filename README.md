@@ -274,11 +274,29 @@ App is launched listening on ***8080*** port by default, set the environment var
 
 20. Create cache interceptor: `nest g interceptor common/interceptors/cache` (we cannot use a cache middleware because middlewares are executed before guards, and we need `AuthGuard` to be runned before the cache interceptor in order to authenticate the user previously). Add `app.useGlobalInterceptors(new CacheInterceptor(cacheService));` in `main.ts`.
 
-21. Add `Dockerfile` and `.dockerignore`. After that, you can create de docker image and run the docker container with the following commands:
+21. Install `morgan`: `npm i morgan`. Create logger middleware: `nest g middleware common/middlewares/http-request-logger`. Configure it in `AppModule`:
+
+    ```typescript
+    @Module({
+      ...
+    })
+    export class AppModule {
+      configure(consumer: MiddlewareConsumer) {
+        process.env.NODE_ENV !== 'test' &&
+          consumer
+            .apply(HttpRequestLoggerMiddleware)
+            // do not log this call, too much flood
+            .exclude('openapi')
+            .forRoutes('*');
+      }
+    }
+    ```
+
+22. Add `Dockerfile` and `.dockerignore`. After that, you can create de docker image and run the docker container with the following commands:
 
     ```bash
     docker build -t [IMAGE_NAME] .
     docker run --name [CONTAINER_NAME] -p 8080:8080 -t -d [IMAGE_NAME]
     ```
 
-22. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
+23. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
