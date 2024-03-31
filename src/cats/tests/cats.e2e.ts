@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { Server } from 'http';
 
-import { setup, stop } from 'src/main';
+import { setup, stop } from 'src/app';
 import AuthService from 'src/auth/auth.service';
 import { CatsRepository } from '../cats.repository';
-import { Server } from 'http';
 import { AppModule } from 'src/app.module';
 
 describe('CatsController (e2e)', () => {
