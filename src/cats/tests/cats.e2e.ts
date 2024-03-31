@@ -1,16 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
 import * as request from 'supertest';
 
-import { CatsModule } from 'src/cats/cats.module';
-import { CacheModule } from 'src/cache/cache.module';
-import { AuthModule } from 'src/auth/auth.module';
 import { setup, stop } from 'src/main';
 import AuthService from 'src/auth/auth.service';
 import { CatsRepository } from '../cats.repository';
 import { Server } from 'http';
+import { AppModule } from 'src/app.module';
 
 describe('CatsController (e2e)', () => {
   let app: INestApplication;
@@ -21,26 +17,7 @@ describe('CatsController (e2e)', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          envFilePath: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`,
-        }),
-        CacheModule.forRootAsync({
-          useFactory: () => ({
-            uri: process.env.REDIS_URI,
-          }),
-        }),
-        MongooseModule.forRootAsync({
-          useFactory: () => ({
-            uri: process.env.MONGODB_URI,
-          }),
-        }),
-        AuthModule.forRoot({
-          jwtSecret: process.env.JWT_SECRET,
-          uuidNamespace: process.env.UUID_NAMESPACE,
-        }),
-        CatsModule,
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = module.createNestApplication();

@@ -19,11 +19,11 @@
     "start:debug": "nest start --debug --watch",
     "start:dev": "NODE_ENV=dev nest start --watch",
     "start:prod": "node dist/main",
-    "test": "npx jest --detectOpenHandles --forceExit",
-    "test:cov": "npx jest --coverage --detectOpenHandles --forceExit",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --detectOpenHandles --forceExit",
-    "test:e2e": "npx jest --config ./test/jest-e2e.json --detectOpenHandles --forceExit",
-    "test:watch": "npx jest --watch --detectOpenHandles --forceExit"
+    "test": "npx jest --detectOpenHandles",
+    "test:cov": "npx jest --coverage --detectOpenHandles",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --detectOpenHandles",
+    "test:e2e": "npx jest --config ./test/jest-e2e.json --detectOpenHandles",
+    "test:watch": "npx jest --watch --detectOpenHandles"
   },
   "jest": {
     "collectCoverageFrom": [

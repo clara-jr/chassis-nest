@@ -37,6 +37,7 @@ export default class CacheService implements OnApplicationShutdown {
       }
     }
 
+    console.info(`✅ Redis connected: ${redis_uri}`);
     return new CacheService(redis);
   }
 

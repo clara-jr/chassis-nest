@@ -43,6 +43,11 @@ function setup(app) {
   const cacheService = app.get(CacheService);
   app.useGlobalInterceptors(new CacheInterceptor(cacheService));
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Start listening for shutdown hooks to call app.close to stop Express server automatically
+  // This already closes MongoDB connection via MongooseModule
+  // and Redis vía CacheService onApplicationShutdown
+  app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);
 }
 
 async function stop(app) {
@@ -67,25 +72,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('openapi', app, document);
 
-  // Starts listening for shutdown hooks
-  app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);
-
   // Start Express server
   await app.listen(PORT);
   console.info(`✅ Express server listening at port: ${PORT}`);
-
-  // Docker stop
-  process.on('SIGTERM', async () => {
-    await stop(app);
-    process.exit(0);
-  });
-
-  // Ctrl-C
-  process.on('SIGINT', async () => {
-    await stop(app);
-    process.exit(0);
-  });
 }
-bootstrap();
+
+process.env.NODE_ENV !== 'test' && bootstrap();
 
 export { bootstrap, setup, stop };
