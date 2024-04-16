@@ -9,11 +9,12 @@ import {
   Body,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { UpdateCatDto } from './dtos/update-cat.dto';
-import { CreateCatDto } from './dtos/create-cat.dto';
+import { createCatSchema } from './schemas/create-cat.schema';
+import { updateCatSchema } from './schemas/update-cat.schema';
 import { JwtUser, JwtUserType } from 'src/common/decorators/jwtUser.decorator';
-import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { paginationQuerySchema } from 'src/common/schemas/pagination-query.schema';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ZodPipe } from 'src/common/pipes/zod.pipe';
 
 @ApiTags('cats')
 @Controller('cats')
@@ -22,7 +23,7 @@ export class CatsController {
 
   @Get()
   findAll(
-    @Query() paginationQuery: PaginationQueryDto,
+    @Query(new ZodPipe(paginationQuerySchema)) paginationQuery,
     @JwtUser() jwtUser: JwtUserType,
   ) {
     console.log(
@@ -43,7 +44,10 @@ export class CatsController {
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
   @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Post()
-  create(@Body() body: CreateCatDto, @JwtUser() jwtUser: JwtUserType) {
+  create(
+    @Body(new ZodPipe(createCatSchema)) body,
+    @JwtUser() jwtUser: JwtUserType,
+  ) {
     console.log(
       `This action creates document with body ${body} for user ${jwtUser.userName}`,
     );
@@ -55,7 +59,7 @@ export class CatsController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() body: UpdateCatDto,
+    @Body(new ZodPipe(updateCatSchema)) body,
     @JwtUser() jwtUser: JwtUserType,
   ) {
     console.log(

@@ -7,6 +7,7 @@ import {
   UpdateQuery,
 } from 'mongoose';
 import { DeleteResult } from 'mongodb';
+import { PaginationQueryDto } from '../schemas/pagination-query.schema';
 
 export class EntityRepository<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
@@ -44,8 +45,9 @@ export class EntityRepository<T extends Document> {
 
   async find(
     filter: FilterQuery<T>,
-    { limit, offset }: { limit: number; offset: number },
+    paginationQuery: PaginationQueryDto,
   ): Promise<T[]> {
+    const { limit, offset } = paginationQuery;
     return this.model.find<T>(filter).skip(offset).limit(limit).exec();
   }
 
