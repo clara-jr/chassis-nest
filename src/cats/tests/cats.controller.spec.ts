@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CatsController } from '../cats.controller';
 import { CatsService } from '../cats.service';
 import { Cat } from '../cats.entity';
-import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { PaginationQueryDto } from 'src/common/schemas/pagination-query.schema';
 import { JwtUserType } from 'src/common/decorators/jwtUser.decorator';
 import { CatsRepository } from '../cats.repository';
 

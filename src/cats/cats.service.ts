@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCatDto } from './dtos/create-cat.dto';
-import { UpdateCatDto } from './dtos/update-cat.dto';
-import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { CreateCatDto } from './schemas/create-cat.schema';
+import { UpdateCatDto } from './schemas/update-cat.schema';
+import { PaginationQueryDto } from 'src/common/schemas/pagination-query.schema';
 import { NotFoundError } from 'src/common/filters/http-exception.filter';
 import { CatsRepository } from './cats.repository';
 

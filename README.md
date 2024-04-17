@@ -307,3 +307,5 @@ App is launched listening on ***8080*** port by default, set the environment var
     ```
 
 23. Configure GitHub Action in `.github/workflows/main.yaml`. This action executes linter and tests and reads the [GitHub secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) of the repository to fill the .env file with the secret called `ENV_FILE` and use the `GITHUB_TOKEN` secret to build and push a Docker image to [GitHub Packages](https://github.com/features/packages).
+
+24. Use `zod` instead of `class-validator`. Thanks to [@juliojordan](https://github.com/juliojordan) ❤️ [Zod demo](https://medium.com/@juliojordan/nestjs-and-zod-eff1e3892c05) and [NestJS documentation](https://docs.nestjs.com/pipes#object-schema-validation).

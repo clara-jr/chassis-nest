@@ -5,7 +5,7 @@ import { Connection } from 'mongoose';
 
 import { CatsService } from '../cats.service';
 import { CatsModule } from '../cats.module';
-import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
+import { PaginationQueryDto } from 'src/common/schemas/pagination-query.schema';
 import { CatsRepository } from '../cats.repository';
 
 describe('CatsService', () => {
