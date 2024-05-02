@@ -7,9 +7,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '20.11.0'
+        node-version: '22.1.0'
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.10.0
       with:
