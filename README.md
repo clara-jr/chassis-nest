@@ -5,8 +5,8 @@ Chassis for a REST API using [NestJS](https://github.com/nestjs/nest), Express.j
 
 ## Requirements
 
-- `node` v20.11.0
-- `npm` v10.2.4
+- `node` v22.1.0
+- `npm` v10.7.0
 - [Nest CLI](https://www.npmjs.com/package/@nestjs/cli)
 - MongoDB running locally
 
@@ -38,8 +38,8 @@ App is launched listening on ***8080*** port by default, set the environment var
 
     ```json
     "engines": {
-      "node": ">=20.11.0",
-      "npm": ">=10.2.4"
+      "node": ">=22.1.0",
+      "npm": ">=10.7.0"
     }
     ```
 

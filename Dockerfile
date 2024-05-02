@@ -1,5 +1,5 @@
 # Image with node and npm from Docker Hub
-FROM node:20.11.0
+FROM node:22.1.0
 # Create app directory
 WORKDIR /usr/src/app
 # Bundle app source
