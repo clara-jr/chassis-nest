@@ -1,5 +1,5 @@
 {
   "*.{ts,json}": [
-    "node --run lint:fix"
+    "node --run lint:staged"
   ]
 }

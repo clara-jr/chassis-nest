@@ -11,6 +11,7 @@
     "lint": "npx eslint . \"**/*.{ts,json}\"",
     "lint:fix": "npx eslint . \"**/*.{ts,json}\" --fix",
     "lint:quiet": "npx eslint . \"**/*.{ts,json}\" --quiet",
+    "lint:staged": "npx eslint . --fix",
     "pre-commit": "npx lint-staged",
     "pre-commit-msg": "npx --no -- commitlint --edit ${1}",
     "pre-push": "npx jest",
