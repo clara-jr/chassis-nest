@@ -12,11 +12,11 @@ Chassis for a REST API using [NestJS](https://github.com/nestjs/nest), Express.j
 
 ## Basic Usage
 
-- use `npm run start:dev` to run the service in development mode (with `NODE_ENV=dev`).
-- use `npm run lint` for code linting.
-- use `npm test` for executing tests.
-- use `npm run test:e2e` for executing e2e tests.
-- use `npm run test:cov` for tests coverage.
+- use `node --run start:dev` to run the service in development mode (with `NODE_ENV=dev`).
+- use `node --run lint` for code linting.
+- use `node --run test` for executing tests.
+- use `node --run test:e2e` for executing e2e tests.
+- use `node --run test:cov` for tests coverage.
 
 I also recommend to use `ncu` to find outdated dependencies (and run `ncu -u` to upgrade `package.json`).
 
@@ -89,19 +89,19 @@ App is launched listening on ***8080*** port by default, set the environment var
 11. Create `.husky/pre-commit` file to insert command that should be executed before making a commit. This file looks like this:
 
     ```bash
-    npm run pre-commit
+    node --run pre-commit
     ```
 
 12. Create `.husky/pre-commit-msg` file to insert command that should be executed to check the commit message. This file looks like this:
 
     ```bash
-    npm run pre-commit-msg
+    node --run pre-commit-msg
     ```
 
 13. Create `.husky/pre-push` file to insert command that should be executed before pushing a commit. This file looks like this:
 
     ```bash
-    npm run pre-push
+    node --run pre-push
     ```
 
     If tests fail, commit won't be pushed.

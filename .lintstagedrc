@@ -1,5 +1,5 @@
 {
   "*.{ts,json}": [
-    "npm run lint:fix"
+    "node --run lint:fix"
   ]
 }
