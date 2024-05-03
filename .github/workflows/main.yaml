@@ -21,9 +21,9 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Lint Code
-      run: npm run lint
+      run: node --run lint
     - name: Run Tests
-      run: npm test
+      run: node --run test
   # Deploy to Github Packages: https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages
   # build:
   #   runs-on: ubuntu-latest

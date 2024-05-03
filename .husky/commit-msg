@@ -1,1 +1,1 @@
-npm run pre-commit-msg
+node --run pre-commit-msg
