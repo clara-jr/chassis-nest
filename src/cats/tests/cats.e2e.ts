@@ -37,7 +37,7 @@ describe('CatsController (e2e)', () => {
   afterAll(async () => {
     await authService.clearSessionData(token);
     await stop(app);
-    await closeInMongodConnection()
+    await closeInMongodConnection();
   });
 
   describe('GET /', () => {

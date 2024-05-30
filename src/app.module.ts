@@ -29,7 +29,7 @@ let mongoServer: MongoMemoryServer;
         }
         return {
           uri: process.env.MONGODB_URI,
-        }
+        };
       },
     }),
     AuthModule.forRoot({
