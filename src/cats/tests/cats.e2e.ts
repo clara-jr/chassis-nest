@@ -6,7 +6,7 @@ import { Server } from 'http';
 import { setup, stop } from 'src/app';
 import AuthService from 'src/auth/auth.service';
 import { CatsRepository } from '../cats.repository';
-import { AppModule } from 'src/app.module';
+import { AppModule, closeInMongodConnection } from 'src/app.module';
 
 describe('CatsController (e2e)', () => {
   let app: INestApplication;
@@ -37,6 +37,7 @@ describe('CatsController (e2e)', () => {
   afterAll(async () => {
     await authService.clearSessionData(token);
     await stop(app);
+    await closeInMongodConnection()
   });
 
   describe('GET /', () => {
