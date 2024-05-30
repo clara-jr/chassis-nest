@@ -137,10 +137,27 @@ App is launched listening on ***8080*** port by default, set the environment var
     ```typescript
     @Module({
       imports: [
-        MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
+        MongooseModule.forRoot('mongodb://localhost:27017/chassis-nest'),
       ],
     })
     export class AppModule {}
+    ```
+
+    We could use `mongodb-memory-server` in order to start an in-memory MongoDB instance (using `mongodb-memory-server`) in test environment in order to use it during testing and automatically shut down when testing is complete.
+
+    ```typescript
+    MongooseModule.forRootAsync({
+      useFactory: async () => {
+        if (process.env.NODE_ENV === 'test') {
+          // Start MongoDB in-memory server
+          mongoServer = await MongoMemoryServer.create();
+          process.env.MONGODB_URI = mongoServer.getUri();
+        }
+        return {
+          uri: process.env.MONGODB_URI,
+        }
+      },
+    }),
     ```
 
 11. Migrate Cat entity to a Mongoose Schema using `@nestjs/mongoose` (collection name will be Cats by default if class is named Cat).
