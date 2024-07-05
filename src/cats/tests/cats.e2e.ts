@@ -44,7 +44,7 @@ describe('CatsController (e2e)', () => {
     describe('when token is invalid', () => {
       it('should respond with 401 UNAUTHORIZED when token is invalid', async () => {
         const res = await request(server).get('/cats').expect(401);
-        expect(res.error).toBeDefined;
+        expect(res.error).toBeDefined();
         expect(res.body.errorCode).toEqual('UNAUTHORIZED');
       });
     });
@@ -74,7 +74,7 @@ describe('CatsController (e2e)', () => {
           .set('X-Auth-Token', `${token}`)
           .expect(400); // Mongoose schema validation error
 
-        expect(res.error).toBeDefined;
+        expect(res.error).toBeDefined();
         expect(res.body.errorCode).toEqual('VALIDATION_ERROR');
       });
       it('should respond with 400 VALIDATION_ERROR', async () => {
@@ -83,7 +83,7 @@ describe('CatsController (e2e)', () => {
           .send({})
           .set('X-Auth-Token', `${token}`)
           .expect(400); // DTO validation error
-        expect(res.error).toBeDefined;
+        expect(res.error).toBeDefined();
         expect(res.body.errorCode).toEqual('VALIDATION_ERROR');
       });
     });
@@ -111,7 +111,7 @@ describe('CatsController (e2e)', () => {
           .get(`/cats/${index}`)
           .set('X-Auth-Token', `${token}`)
           .expect(404);
-        expect(res.error).toBeDefined;
+        expect(res.error).toBeDefined();
         expect(res.body.errorCode).toEqual('NOT_FOUND');
       });
     });
@@ -125,7 +125,7 @@ describe('CatsController (e2e)', () => {
           .get(`/cats/${_id}`)
           .set('X-Auth-Token', `${token}`)
           .expect(200);
-        expect(res.body).toBeDefined;
+        expect(res.body).toBeDefined();
         expect(res.body._id.toString()).toEqual(_id.toString());
         expect(res.body.index.toString()).toEqual(index);
       });
