@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { Server } from 'http';
 
 import { setup, stop } from 'src/app';
-import AuthService from 'src/auth/auth.service';
+import JwtService from 'src/auth/jwt.service';
 import { CatsRepository } from '../cats.repository';
 import { AppModule, closeInMongodConnection } from 'src/app.module';
 
@@ -12,8 +12,8 @@ describe('CatsController (e2e)', () => {
   let app: INestApplication;
   let server: Server;
   let catRepository: CatsRepository;
-  let authService: AuthService;
-  let token: string;
+  let jwtService: JwtService;
+  let accessToken: string;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -25,9 +25,11 @@ describe('CatsController (e2e)', () => {
     await app.init();
 
     catRepository = module.get<CatsRepository>(CatsRepository);
-    authService = module.get<AuthService>(AuthService);
+    jwtService = module.get<JwtService>(JwtService);
     server = app.getHttpServer();
-    token = await authService.createToken({ userName: 'test' });
+    ({ accessToken } = await jwtService.createToken({
+      userName: 'test',
+    }));
   });
 
   afterEach(async () => {
@@ -35,7 +37,7 @@ describe('CatsController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await authService.clearSessionData(token);
+    await jwtService.clearSessionData(accessToken);
     await stop(app);
     await closeInMongodConnection();
   });
@@ -56,7 +58,7 @@ describe('CatsController (e2e)', () => {
       it('should respond with 200 OK', async () => {
         const res = await request(server)
           .get('/cats')
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(200);
         expect(res.body).toHaveLength(1);
         expect(res.body[0].index.toString()).toEqual(index);
@@ -71,7 +73,7 @@ describe('CatsController (e2e)', () => {
         const res = await request(server)
           .post('/cats')
           .send({ index })
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(400); // Mongoose schema validation error
 
         expect(res.error).toBeDefined;
@@ -81,7 +83,7 @@ describe('CatsController (e2e)', () => {
         const res = await request(server)
           .post('/cats')
           .send({})
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(400); // DTO validation error
         expect(res.error).toBeDefined;
         expect(res.body.errorCode).toEqual('VALIDATION_ERROR');
@@ -93,7 +95,7 @@ describe('CatsController (e2e)', () => {
         const res = await request(server)
           .post('/cats')
           .send({ index })
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(201);
         expect(res.body.index.toString()).toEqual(index);
 
@@ -109,7 +111,7 @@ describe('CatsController (e2e)', () => {
       it('should respond with 401 UNAUTHORIZED when token is invalid', async () => {
         const res = await request(server)
           .get(`/cats/${index}`)
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(404);
         expect(res.error).toBeDefined;
         expect(res.body.errorCode).toEqual('NOT_FOUND');
@@ -123,7 +125,7 @@ describe('CatsController (e2e)', () => {
       it('should respond with 200 OK', async () => {
         const res = await request(server)
           .get(`/cats/${_id}`)
-          .set('X-Auth-Token', `${token}`)
+          .set('Cookie', [`accessToken=${accessToken}`])
           .expect(200);
         expect(res.body).toBeDefined;
         expect(res.body._id.toString()).toEqual(_id.toString());

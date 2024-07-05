@@ -35,6 +35,14 @@ let mongoServer: MongoMemoryServer;
     AuthModule.forRoot({
       jwtSecret: process.env.JWT_SECRET,
       uuidNamespace: process.env.UUID_NAMESPACE,
+      unprotectedRoutes: process.env.UNPROTECTED_ROUTES,
+      jwtAudience: process.env.JWT_AUDIENCE,
+      jwtIssuer: process.env.JWT_ISSUER,
+      accessTokenTTL: process.env.ACCESSTOKEN_TTL,
+      refreshTokenTTL: process.env.REFRESHTOKEN_TTL,
+      userName: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      saltRound: process.env.SALT_ROUND,
     }),
     CatsModule,
   ], // Any exported providers of these imported modules are now fully available here as well.
