@@ -1,11 +1,14 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import { CatsModule } from './cats/cats.module';
 import { CacheModule } from './cache/cache.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpRequestLoggerMiddleware } from './common/middlewares/http-request-logger.middleware';
+
+let mongoServer: MongoMemoryServer;
 
 @Module({
   imports: [
@@ -18,9 +21,16 @@ import { HttpRequestLoggerMiddleware } from './common/middlewares/http-request-l
       }),
     }),
     MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: process.env.MONGODB_URI,
-      }),
+      useFactory: async () => {
+        if (process.env.NODE_ENV === 'test') {
+          // Start MongoDB in-memory server
+          mongoServer = await MongoMemoryServer.create();
+          process.env.MONGODB_URI = mongoServer.getUri();
+        }
+        return {
+          uri: process.env.MONGODB_URI,
+        };
+      },
     }),
     AuthModule.forRoot({
       jwtSecret: process.env.JWT_SECRET,
@@ -39,3 +49,7 @@ export class AppModule {
         .forRoutes('*');
   }
 }
+
+export const closeInMongodConnection = async () => {
+  if (mongoServer) await mongoServer.stop();
+};
