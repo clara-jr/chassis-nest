@@ -5,6 +5,11 @@ import tseslint from 'typescript-eslint';
 import tsparser from '@typescript-eslint/parser';
 
 export default [
+  {
+    // global ignores
+    // folders can only be ignored at the global level, per-cfg you must do: '**/dist/**/*'
+    ignores: ['**/dist/', '**/coverage/', 'package-lock.json', 'tsconfig.json', '*.md'],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended, // Recommended config applied to all files
   // Override the recommended config
@@ -18,14 +23,6 @@ export default [
         programs: [tsparser.createProgram('tsconfig.json')],
       },
     },
-    ignores: [
-      'package-lock.json',
-      'coverage/',
-      'node_modules/',
-      'dist/',
-      'tsconfig.json',
-      '*.md',
-    ],
     plugins: {
       'json-format': jsonformat,
     },
