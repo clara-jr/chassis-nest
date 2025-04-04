@@ -14,6 +14,7 @@ export default [
   ...tseslint.configs.recommended, // Recommended config applied to all files
   // Override the recommended config
   {
+    files: ['**/*.ts'],
     languageOptions: {
       globals: { ...globals.node, ...globals.jest },
       parser: tsparser,
