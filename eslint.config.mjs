@@ -20,7 +20,6 @@ export default [
       parserOptions: {
         project: 'tsconfig.json',
         sourceType: 'module',
-        programs: [tsparser.createProgram('tsconfig.json')],
       },
     },
     plugins: {
