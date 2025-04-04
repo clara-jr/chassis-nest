@@ -8,7 +8,7 @@
   "testEnvironment": "node",
   "testRegex": ".e2e\\.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.ts$": "ts-jest"
   },
   "moduleNameMapper": {
     "^src/(.*)$": "<rootDir>/$1"

@@ -46,24 +46,40 @@ App is launched listening on ***8080*** port by default, set the environment var
 3. Install mongoose: `npm install mongoose`.
 4. Install dev dependencies such as linter ones (eslint-plugin-json-format):
     - `npm install --save-dev eslint-plugin-json-format`
-5. Check the eslint configuration, `.eslintrc.json` file should have:
+5. Check the eslint configuration, `eslint.config.js` file should have:
 
-    ```json
-    "env": {
-      "node": true,
-      "jest": true
-    }
+    ```js
+    import globals from 'globals';
+
+    export default [
+      {
+        languageOptions: {
+          globals: { ...globals.node, ...globals.jest },
+        }
+      }
+    ]
     ```
 
     Also add `json-format` plugin (the one installed with the dependency `eslint-plugin-json-format`)
 
-    ```json
-    "plugins": [
-      "json-format"
+    ```js
+    import jsonformat from 'eslint-plugin-json-format';
+
+    export default [
+      { 
+        ...
+        plugins: {
+          'json-format': jsonformat
+        }
+      }
     ]
     ```
 
-    Add `.eslintignore` file.
+    Add ignored files in `eslint.config.js` ([`.eslintignore` file is no more needed using flat config file format](https://eslint.org/docs/latest/use/configure/ignore)):
+
+    ```js
+    ignores: ['package-lock.json', 'coverage/', 'node_modules/', 'dist/', 'tsconfig.json', '*.md']
+    ```
 
 6. Create npm configuration file `.npmrc` with `engine-strict=true` in order to notify with an error alert when trying to install/test/start something without the correct Node.js and npm versions.
 7. Install [Husky](https://typicode.github.io/husky/how-to.html) to execute linter fixes and check tests before a commit is created or pushed: `npm install --save-dev husky`. Install husky git hooks (only once): `npx husky init` and add it to `package.json` script called `prepare`. If you want to make a commit skipping husky pre-commit git hooks you can use `git commit -m "..." -n`; the same occurs when you want to skip pre-push hooks: `git push --no-verify`.
